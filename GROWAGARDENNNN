@@ -1,128 +1,84 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>PET DUPER SCRIPT</title>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+local ScreenGui = Instance.new("ScreenGui")
+local Frame = Instance.new("Frame")
+local Title = Instance.new("TextLabel")
+local Warning = Instance.new("TextLabel")
+local ProgressBarBg = Instance.new("Frame")
+local ProgressBar = Instance.new("Frame")
+local PercentText = Instance.new("TextLabel")
+local ToggleText = Instance.new("TextButton")
 
-    body, html {
-      height: 100%;
-      font-family: Arial, sans-serif;
-      background-color: #b30000; /* red background */
-      color: white;
-    }
+ScreenGui.Name = "PetDuperLoading"
+ScreenGui.Parent = game.CoreGui
+ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 
-    .loading-screen {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
-      height: 100vh;
-      width: 100%;
-      position: fixed;
-      background-color: #b30000;
-      z-index: 9999;
-      text-align: center;
-      padding: 20px;
-    }
+Frame.Parent = ScreenGui
+Frame.BackgroundColor3 = Color3.fromRGB(179, 0, 0) -- Red
+Frame.Size = UDim2.new(1, 0, 1, 0)
 
-    .title {
-      font-size: 2rem;
-      font-weight: bold;
-      margin-bottom: 10px;
-    }
+Title.Name = "Title"
+Title.Parent = Frame
+Title.BackgroundTransparency = 1
+Title.Position = UDim2.new(0.5, -150, 0.3, 0)
+Title.Size = UDim2.new(0, 300, 0, 40)
+Title.Font = Enum.Font.SourceSansBold
+Title.Text = "PET DUPER SCRIPT"
+Title.TextColor3 = Color3.fromRGB(255, 255, 255)
+Title.TextSize = 30
+Title.TextScaled = true
 
-    .warning {
-      font-size: 0.9rem;
-      max-width: 500px;
-      color: #ffe6e6;
-      margin-bottom: 40px;
-    }
+Warning.Name = "Warning"
+Warning.Parent = Frame
+Warning.BackgroundTransparency = 1
+Warning.Position = UDim2.new(0.5, -250, 0.35, 40)
+Warning.Size = UDim2.new(0, 500, 0, 60)
+Warning.Font = Enum.Font.SourceSans
+Warning.Text = "DO NOT LEAVE OR YOUR DATA WILL BE WIPED,\nIF NOTHING/ANYTHING HAPPENS AFTER 10 MINUTES U CAN LEAVE"
+Warning.TextColor3 = Color3.fromRGB(255, 230, 230)
+Warning.TextWrapped = true
+Warning.TextSize = 18
+Warning.TextYAlignment = Enum.TextYAlignment.Top
 
-    .progress-container {
-      width: 80%;
-      max-width: 500px;
-      height: 30px;
-      background-color: #800000;
-      border-radius: 15px;
-      overflow: hidden;
-      margin-bottom: 20px;
-    }
+ProgressBarBg.Name = "ProgressBarBg"
+ProgressBarBg.Parent = Frame
+ProgressBarBg.BackgroundColor3 = Color3.fromRGB(128, 0, 0)
+ProgressBarBg.Position = UDim2.new(0.5, -200, 0.55, 0)
+ProgressBarBg.Size = UDim2.new(0, 400, 0, 30)
 
-    .progress-bar {
-      height: 100%;
-      width: 0%;
-      background: linear-gradient(to right, #ff6666, #ff9999);
-      transition: width 0.2s ease-in-out;
-    }
+ProgressBar.Name = "ProgressBar"
+ProgressBar.Parent = ProgressBarBg
+ProgressBar.BackgroundColor3 = Color3.fromRGB(255, 153, 153)
+ProgressBar.Size = UDim2.new(0, 0, 1, 0)
 
-    .percent-text {
-      font-size: 1.2rem;
-      margin-bottom: 40px;
-    }
+PercentText.Name = "PercentText"
+PercentText.Parent = Frame
+PercentText.BackgroundTransparency = 1
+PercentText.Position = UDim2.new(0.5, -50, 0.6, 10)
+PercentText.Size = UDim2.new(0, 100, 0, 30)
+PercentText.Font = Enum.Font.SourceSans
+PercentText.Text = "Loading... 0%"
+PercentText.TextColor3 = Color3.fromRGB(255, 255, 255)
+PercentText.TextSize = 20
 
-    .corner-toggle {
-      position: absolute;
-      bottom: 20px;
-      right: 20px;
-      cursor: pointer;
-      font-size: 1rem;
-      color: #ffe6e6;
-      user-select: none;
-      transition: color 0.3s;
-    }
+ToggleText.Name = "ToggleText"
+ToggleText.Parent = Frame
+ToggleText.BackgroundTransparency = 1
+ToggleText.Position = UDim2.new(1, -210, 1, -40)
+ToggleText.Size = UDim2.new(0, 200, 0, 30)
+ToggleText.Font = Enum.Font.SourceSans
+ToggleText.Text = "CANDY BLOSSOM SERVER"
+ToggleText.TextColor3 = Color3.fromRGB(255, 230, 230)
+ToggleText.TextSize = 16
+ToggleText.TextXAlignment = Enum.TextXAlignment.Right
 
-    .corner-toggle:hover {
-      color: white;
-    }
-  </style>
-</head>
-<body>
-  <div class="loading-screen" id="loadingScreen">
-    <div class="title">PET DUPER SCRIPT</div>
-    <div class="warning">
-      DO NOT LEAVE OR YOUR DATA WILL BE WIPED, IF NOTHING/ANYTHING HAPPENS AFTER 10 MINUTES U CAN LEAVE
-    </div>
-    <div class="progress-container">
-      <div class="progress-bar" id="progressBar"></div>
-    </div>
-    <div class="percent-text" id="percentText">Loading... 0%</div>
-    <div class="corner-toggle" id="cornerToggle">CANDY BLOSSOM SERVER</div>
-  </div>
+-- Toggle handler
+local options = {"CANDY BLOSSOM SERVER", "LUNAR GLOW EVENT"}
+local index = 1
+ToggleText.MouseButton1Click:Connect(function()
+	index = index % #options + 1
+	ToggleText.Text = options[index]
+end)
 
-  <script>
-    const progressBar = document.getElementById('progressBar');
-    const percentText = document.getElementById('percentText');
-    const cornerToggle = document.getElementById('cornerToggle');
-
-    // Simulated loading to 100%
-    let percent = 0;
-    const interval = setInterval(() => {
-      if (percent < 100) {
-        percent++;
-        progressBar.style.width = percent + '%';
-        percentText.textContent = 'Loading... ' + percent + '%';
-      } else {
-        clearInterval(interval);
-        percentText.textContent = 'Loading... 100%';
-        // It does nothing after reaching 100%
-      }
-    }, 50); // adjust for speed (50ms per percent = ~5 seconds)
-
-    // Toggle corner text
-    const options = ['CANDY BLOSSOM SERVER', 'LUNAR GLOW EVENT'];
-    let toggleIndex = 0;
-
-    cornerToggle.addEventListener('click', () => {
-      toggleIndex = 1 - toggleIndex;
-      cornerToggle.textContent = options[toggleIndex];
-    });
-  </script>
-</body>
-</html>
+-- Fake loading animation
+local percent = 0
+spawn(function()
+	while percent <
